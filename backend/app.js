@@ -5,8 +5,8 @@ const sequelize = require("./config/database");
 // Importera models/index.js så att alla relationer laddas in
 require("./models");
 
-const productRoutes = require("./routes/productRoutes");
-const userRoutes = require("./routes/userRoutes");
+const productRoutes = require("./routes/productRoute");
+const userRoutes = require("./routes/userRoute");
 
 const app = express();
 
