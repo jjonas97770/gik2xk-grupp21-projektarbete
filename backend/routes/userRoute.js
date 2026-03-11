@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const userService = require("../services/userService");
+const { Cart } = require("../models");
 
 // GET /users – hämtar alla användare
 router.get("/", async (req, res) => {
@@ -58,6 +59,22 @@ router.delete("/:id", async (req, res) => {
 router.get("/:id/getCart", async (req, res) => {
   try {
     res.json(await userService.getCart(req.params.id));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// PUT /users/:id/payCart – markerar senaste varukorgen som betald
+router.put("/:id/payCart", async (req, res) => {
+  try {
+    const cart = await Cart.findOne({
+      where: { user_id: req.params.id, payed: false },
+      order: [["createdAt", "DESC"]],
+    });
+    if (!cart)
+      return res.status(404).json({ error: "Ingen aktiv varukorg hittades" });
+    await cart.update({ payed: true });
+    res.json({ message: "Köp genomfört!" });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
