@@ -4,7 +4,6 @@ import {
   Toolbar,
   Typography,
   Button,
-  Box,
   Menu,
   MenuItem,
   Divider,
@@ -14,14 +13,31 @@ import BuildIcon from "@mui/icons-material/Build";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import GridViewIcon from "@mui/icons-material/GridView";
 
 // Menystruktur: Märke -> Serie -> Kategorier
 const menuStructure = {
   Milwaukee: {
     "Milwaukee M18": [
+      "Batterier & Laddare",
+      "Betongvibratorer",
       "Borrhammare",
       "Slagskruvdragare",
       "Cirkelsågar",
+      "Combokit",
+      "Fogpistoler & tillbehör",
+      "Fräsmaskiner",
+      "Hyvlar",
+      "Kap och Gersågar",
+      "Lampor",
+      "Metallsågar & Metallbearbetning",
+      "Mutterdragare",
+      "Nibblare och Plåtsaxar",
+      "Polermaskiner",
+      "Skruvautomater",
+      "Slipmaskiner",
+      "Dyckert & Stiftpistoler",
+      "Sticksågar",
       "Tigersågar",
       "Vinkelslipar",
       "Paket",
@@ -136,6 +152,16 @@ function Navbar() {
               <KeyboardArrowRightIcon sx={{ ml: "auto" }} />
             </MenuItem>
           ))}
+          <Divider />
+          {/* Länk till kategorisidan med bildöversikt */}
+          <MenuItem
+            onClick={() => {
+              handleCloseAll();
+              navigate("/categories");
+            }}
+          >
+            Se alla kategorier
+          </MenuItem>
         </Menu>
 
         {/* Nivå 3 – Kategorimenyn */}
@@ -157,6 +183,16 @@ function Navbar() {
               </MenuItem>
             ))}
         </Menu>
+
+        {/* Direktknapp till kategorisidan med bildöversikt */}
+        <Button
+          color="inherit"
+          component={Link}
+          to="/categories"
+          startIcon={<GridViewIcon />}
+        >
+          Kategorier
+        </Button>
 
         <Button color="inherit" component={Link} to="/products/new">
           Lägg till produkt

@@ -6,6 +6,7 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import CartPage from "./pages/CartPage";
 import ProductFormPage from "./pages/ProductFormPage";
 import OrderConfirmationPage from "./pages/OrderConfirmationPage";
+import CategoryPage from "./pages/CategoryPage";
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
             path="/order-confirmation"
             element={<OrderConfirmationPage />}
           />
+          {/* kategorier */}
+          <Route path="/categories" element={<CategoryPage />} />
         </Routes>
       </Container>
     </BrowserRouter>
