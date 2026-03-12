@@ -61,6 +61,7 @@ function ProductsPage() {
                   "https://via.placeholder.com/300x200?text=Ingen+bild"
                 }
                 alt={product.title}
+                sx={{ objectFit: "contain", backgroundColor: "#f5f5f5", p: 1 }}
               />
               <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h6">{product.title}</Typography>
