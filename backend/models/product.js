@@ -10,6 +10,8 @@ const Product = sequelize.define("Product", {
   price: { type: DataTypes.DOUBLE, allowNull: false },
   // URL till en produktbild
   imageUrl: { type: DataTypes.STRING },
+  // Kategori för produkten, t.ex. "Skruvdragare", "Cirkelsågar"
+  category: { type: DataTypes.STRING },
 });
 
 module.exports = Product;

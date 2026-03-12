@@ -7,17 +7,20 @@ import {
   CardActions,
   Typography,
   Button,
-  Rating,
   CircularProgress,
   Box,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getProducts } from "../api/index";
 
 function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  // Hämtar kategori från URL:en, t.ex. /?category=Borrhammare
+  const [searchParams] = useSearchParams();
+  const category = searchParams.get("category");
 
   // Hämta alla produkter när sidan laddas
   useEffect(() => {
@@ -32,6 +35,11 @@ function ProductsPage() {
       });
   }, []);
 
+  // Om en kategori är vald i menyn, filtrera produkterna – annars visa alla
+  const filteredProducts = category
+    ? products.filter((p) => p.category === category)
+    : products;
+
   // Visa laddningsindikator medan produkter hämtas
   if (loading) {
     return (
@@ -43,11 +51,21 @@ function ProductsPage() {
 
   return (
     <Box>
-      <Typography variant="h4" sx={{ mb: 3 }}>
-        Våra verktyg
+      {/* Rubrik – visar kategorinamn om filtrerad, annars "Våra verktyg" */}
+      <Typography variant="h4" sx={{ mb: 1 }}>
+        {category ? category : "Våra verktyg"}
       </Typography>
+
+      {/* Visa "tillbaka"-knapp om en kategori är vald */}
+      {category && (
+        <Button sx={{ mb: 3 }} onClick={() => navigate("/")}>
+          ← Visa alla produkter
+        </Button>
+      )}
+
+      {/* Produktkort i rutnät */}
       <Grid container spacing={3}>
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <Grid item xs={12} sm={6} md={4} key={product.id}>
             <Card
               sx={{ height: "100%", display: "flex", flexDirection: "column" }}
@@ -78,7 +96,7 @@ function ProductsPage() {
                 </Typography>
               </CardContent>
               <CardActions>
-                {/* Knapp för att se mer detaljer */}
+                {/* Knapp för att se produktdetaljer */}
                 <Button
                   size="small"
                   variant="contained"

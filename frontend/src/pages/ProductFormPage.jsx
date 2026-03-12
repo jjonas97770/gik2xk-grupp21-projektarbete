@@ -8,6 +8,10 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import {
   getProduct,
@@ -16,18 +20,30 @@ import {
   deleteProduct,
 } from "../api/index";
 
+// Samma kategorier som i navbar-menyn
+const categories = [
+  "Borrhammare",
+  "Slagskruvdragare",
+  "Cirkelsågar",
+  "Tigersågar",
+  "Vinkelslipar",
+  "Paket",
+  "Övrigt",
+];
+
 function ProductFormPage() {
   // Hämtar id från URL:en – finns inget id är vi i "skapa"-läge
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(id);
 
-  // Formulärets fält
+  // Formulärets fält – category tillagt
   const [form, setForm] = useState({
     title: "",
     description: "",
     price: "",
     imageUrl: "",
+    category: "",
   });
 
   const [loading, setLoading] = useState(isEditMode);
@@ -42,8 +58,14 @@ function ProductFormPage() {
     if (isEditMode) {
       getProduct(id)
         .then((res) => {
-          const { title, description, price, imageUrl } = res.data;
-          setForm({ title, description, price, imageUrl: imageUrl || "" });
+          const { title, description, price, imageUrl, category } = res.data;
+          setForm({
+            title,
+            description,
+            price,
+            imageUrl: imageUrl || "",
+            category: category || "",
+          });
           setLoading(false);
         })
         .catch((err) => {
@@ -53,7 +75,7 @@ function ProductFormPage() {
     }
   }, [id]);
 
-  // Uppdaterar formulärets state när användaren skriver
+  // Uppdaterar formulärets state när användaren skriver eller väljer
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -147,8 +169,25 @@ function ProductFormPage() {
         value={form.imageUrl}
         onChange={handleChange}
         fullWidth
-        sx={{ mb: 3 }}
+        sx={{ mb: 2 }}
       />
+
+      {/* Kategorival – dropdown med samma kategorier som i menyn */}
+      <FormControl fullWidth sx={{ mb: 3 }}>
+        <InputLabel>Kategori</InputLabel>
+        <Select
+          name="category"
+          value={form.category}
+          label="Kategori"
+          onChange={handleChange}
+        >
+          {categories.map((cat) => (
+            <MenuItem key={cat} value={cat}>
+              {cat}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
       {/* Knappar */}
       <Box sx={{ display: "flex", gap: 2 }}>
