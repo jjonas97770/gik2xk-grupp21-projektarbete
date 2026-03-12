@@ -13,6 +13,11 @@ import {
   Button,
   Snackbar,
   Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { getCart } from "../api/index";
@@ -21,6 +26,7 @@ import axios from "axios";
 function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -44,16 +50,13 @@ function CartPage() {
   // Räknar ut totalpriset
   const totalPrice = cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
 
-  // Genomför köpet
-  const handlePay = async () => {
+  // Genomför köpet – anropas när användaren bekräftar i dialogen
+  const handleConfirmPay = async () => {
+    setDialogOpen(false);
     try {
       await axios.post("http://localhost:3000/users/1/payCart");
-      setCartItems([]);
-      setSnackbar({
-        open: true,
-        message: "Köp genomfört, tack!",
-        severity: "success",
-      });
+      // Navigera till bekräftelsesidan med orderinfo
+      navigate("/order-confirmation", { state: { cartItems, totalPrice } });
     } catch (err) {
       setSnackbar({ open: true, message: "Något gick fel", severity: "error" });
     }
@@ -119,17 +122,41 @@ function CartPage() {
             </Table>
           </TableContainer>
 
-          {/* Knappar */}
           <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
             <Button variant="outlined" onClick={() => navigate("/")}>
               Fortsätt handla
             </Button>
-            <Button variant="contained" color="success" onClick={handlePay}>
+            {/* Öppnar bekräftelsedialogens */}
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => setDialogOpen(true)}
+            >
               Genomför köp
             </Button>
           </Box>
         </Box>
       )}
+
+      {/* Bekräftelsedialog */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <DialogTitle>Bekräfta köp</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Vill du genomföra köpet på {totalPrice.toFixed(2)} kr?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)}>Avbryt</Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleConfirmPay}
+          >
+            Ja, genomför köp
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Snackbar
         open={snackbar.open}

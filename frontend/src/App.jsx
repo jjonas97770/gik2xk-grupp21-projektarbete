@@ -5,6 +5,7 @@ import ProductsPage from "./pages/ProductsPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import CartPage from "./pages/CartPage";
 import ProductFormPage from "./pages/ProductFormPage";
+import OrderConfirmationPage from "./pages/OrderConfirmationPage";
 
 function App() {
   return (
@@ -23,6 +24,11 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           {/* Redigera befintlig produkt */}
           <Route path="/products/:id/edit" element={<ProductFormPage />} />
+          {/* order konfermation*/}
+          <Route
+            path="/order-confirmation"
+            element={<OrderConfirmationPage />}
+          />
         </Routes>
       </Container>
     </BrowserRouter>
