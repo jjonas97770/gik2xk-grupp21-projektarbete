@@ -7,6 +7,7 @@ require("./models");
 
 const productRoutes = require("./routes/productRoute");
 const userRoutes = require("./routes/userRoute");
+const reviewRoutes = require("./routes/reviewRoute");
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 // Alla anrop till /users hanteras av userRoutes
 app.use("/products", productRoutes);
 app.use("/users", userRoutes);
+app.use("/reviews", reviewRoutes);
 
 const PORT = 3000;
 

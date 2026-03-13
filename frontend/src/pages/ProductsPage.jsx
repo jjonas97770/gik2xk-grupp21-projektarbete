@@ -10,13 +10,46 @@ import {
   CircularProgress,
   Box,
   Chip,
+  TextField,
+  Alert,
 } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getProducts } from "../api/index";
+import { getProducts, getReviews, createReview } from "../api/index";
+
+const getOriginalPrice = (id) => {
+  const prices = { 21: 4499, 37: 1799, 63: 1999 };
+  return prices[id] || null;
+};
 
 function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [formSent, setFormSent] = useState(false);
+  // State för recensioner från databasen
+  const [reviews, setReviews] = useState([]);
+  // State för om alla recensioner visas eller bara de tre första
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  // State för formuläret för ny recension
+  const [reviewForm, setReviewForm] = useState({
+    name: "",
+    rating: 5,
+    message: "",
+  });
+  // State för om recensionsformuläret skickats
+  const [reviewSent, setReviewSent] = useState(false);
+
+  // Räknar ut snittbetyget för alla recensioner
+  const avgReviewRating = reviews.length
+    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(
+        1,
+      )
+    : null;
+
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
@@ -34,14 +67,51 @@ function ProductsPage() {
       });
   }, []);
 
+  // Hämtar alla recensioner från backend när sidan laddas
+  useEffect(() => {
+    getReviews()
+      .then((res) => setReviews(res.data))
+      .catch((err) => console.error(err));
+  }, []);
+
   const filteredProducts = category
     ? products.filter((p) => p.category === category)
     : products;
 
-  // Hämta rea-produkter från databasen
   const saleProducts = products
     .filter((p) => [21, 37, 63].includes(p.id))
     .slice(0, 3);
+
+  const handleFormChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFormSubmit = () => {
+    if (formData.name && formData.email && formData.message) {
+      setFormSent(true);
+      setFormData({ name: "", email: "", message: "" });
+    }
+  };
+
+  // Uppdaterar recensionsformulärets state när användaren skriver
+  const handleReviewChange = (e) => {
+    setReviewForm({ ...reviewForm, [e.target.name]: e.target.value });
+  };
+
+  // Skickar recensionen till backend och uppdaterar listan
+  const handleReviewSubmit = () => {
+    if (reviewForm.name && reviewForm.rating && reviewForm.message) {
+      createReview({ ...reviewForm, rating: Number(reviewForm.rating) })
+        .then((res) => {
+          setReviews([res.data, ...reviews]);
+          setReviewSent(true);
+          setReviewForm({ name: "", rating: 5, message: "" });
+          // Dölj bekräftelsemeddelandet efter 3 sekunder
+          setTimeout(() => setReviewSent(false), 3000);
+        })
+        .catch((err) => console.error(err));
+    }
+  };
 
   if (loading) {
     return (
@@ -261,7 +331,7 @@ function ProductsPage() {
                             fontSize: "0.9rem",
                           }}
                         >
-                          {product.originalPrice} kr
+                          {getOriginalPrice(product.id)} kr
                         </Typography>
                       </Box>
                     </CardContent>
@@ -284,6 +354,238 @@ function ProductsPage() {
                 </Grid>
               ))}
             </Grid>
+          </Box>
+
+          {/* Recensionssektion */}
+          <Box sx={{ mb: 6 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+              <Typography
+                variant="h5"
+                sx={{ fontWeight: 800, textTransform: "uppercase" }}
+              >
+                ⭐ Kundrecensioner
+              </Typography>
+              <Chip
+                label={`${reviews.length} RECENSIONER`}
+                sx={{
+                  bgcolor: "#e31837",
+                  color: "#fff",
+                  fontWeight: 700,
+                  borderRadius: 0,
+                }}
+              />
+              {avgReviewRating && (
+                <Typography sx={{ fontWeight: 700, color: "text.secondary" }}>
+                  {avgReviewRating} / 5
+                </Typography>
+              )}
+            </Box>
+
+            {/* Visa de tre första recensionerna, eller alla om showAllReviews är true */}
+            <Grid container spacing={3} sx={{ mb: 3 }}>
+              {(showAllReviews ? reviews : reviews.slice(0, 3)).map(
+                (review) => (
+                  <Grid item xs={12} sm={6} md={4} key={review.id}>
+                    <Card
+                      sx={{
+                        borderRadius: 0,
+                        boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+                        height: "100%",
+                      }}
+                    >
+                      <CardContent>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            mb: 1,
+                          }}
+                        >
+                          <Typography sx={{ fontWeight: 700 }}>
+                            {review.name}
+                          </Typography>
+                          <Typography
+                            sx={{ color: "#e31837", fontWeight: 800 }}
+                          >
+                            {"⭐".repeat(review.rating)}
+                          </Typography>
+                        </Box>
+                        <Typography variant="body2" color="text.secondary">
+                          {review.message}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ),
+              )}
+            </Grid>
+
+            {/* Visa fler/färre knapp – visas bara om det finns fler än 3 recensioner */}
+            {reviews.length > 3 && (
+              <Button
+                onClick={() => setShowAllReviews(!showAllReviews)}
+                sx={{ color: "#e31837", fontWeight: 700, mb: 3 }}
+              >
+                {showAllReviews
+                  ? "← Visa färre"
+                  : `Visa alla ${reviews.length} recensioner →`}
+              </Button>
+            )}
+
+            {/* Formulär för att lämna en ny recension */}
+            <Box sx={{ maxWidth: 600, mt: 2 }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 800, mb: 2, textTransform: "uppercase" }}
+              >
+                Lämna en recension
+              </Typography>
+              {reviewSent ? (
+                <Alert severity="success" sx={{ borderRadius: 0 }}>
+                  Tack för din recension!
+                </Alert>
+              ) : (
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <TextField
+                    name="name"
+                    label="Namn"
+                    value={reviewForm.name}
+                    onChange={handleReviewChange}
+                    variant="outlined"
+                    size="small"
+                  />
+                  <TextField
+                    name="rating"
+                    label="Betyg (1-5)"
+                    value={reviewForm.rating}
+                    onChange={handleReviewChange}
+                    variant="outlined"
+                    size="small"
+                    type="number"
+                    inputProps={{ min: 1, max: 5 }}
+                  />
+                  <TextField
+                    name="message"
+                    label="Din recension"
+                    value={reviewForm.message}
+                    onChange={handleReviewChange}
+                    variant="outlined"
+                    multiline
+                    rows={3}
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={handleReviewSubmit}
+                    sx={{
+                      bgcolor: "#e31837",
+                      color: "#fff",
+                      fontWeight: 700,
+                      borderRadius: 0,
+                      width: "fit-content",
+                      "&:hover": { bgcolor: "#b5102a" },
+                    }}
+                  >
+                    Skicka recension
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </Box>
+
+          {/* Kontaktformulär */}
+          <Box
+            sx={{
+              width: "100vw",
+              left: "50%",
+              position: "relative",
+              transform: "translateX(-50%)",
+              bgcolor: "#1a1a1a",
+              py: 8,
+              px: { xs: 3, md: 8 },
+              mt: 6,
+            }}
+          >
+            <Box sx={{ maxWidth: 600, mx: "auto" }}>
+              <Chip
+                label="KONTAKT"
+                sx={{
+                  bgcolor: "#e31837",
+                  color: "#fff",
+                  fontWeight: 700,
+                  fontSize: "0.7rem",
+                  letterSpacing: 2,
+                  mb: 2,
+                  borderRadius: 0,
+                }}
+              />
+              <Typography
+                variant="h4"
+                sx={{
+                  color: "#fff",
+                  fontWeight: 900,
+                  textTransform: "uppercase",
+                  mb: 1,
+                }}
+              >
+                Kontakta oss
+              </Typography>
+              <Typography sx={{ color: "rgba(255,255,255,0.6)", mb: 4 }}>
+                Har du frågor om våra produkter? Hör av dig så återkommer vi så
+                snart som möjligt.
+              </Typography>
+
+              {formSent ? (
+                <Alert severity="success" sx={{ borderRadius: 0 }}>
+                  Tack! Vi återkommer till dig inom kort.
+                </Alert>
+              ) : (
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <TextField
+                    name="name"
+                    label="Namn"
+                    value={formData.name}
+                    onChange={handleFormChange}
+                    variant="filled"
+                    sx={{ bgcolor: "#fff", borderRadius: 0 }}
+                  />
+                  <TextField
+                    name="email"
+                    label="E-post"
+                    value={formData.email}
+                    onChange={handleFormChange}
+                    variant="filled"
+                    sx={{ bgcolor: "#fff", borderRadius: 0 }}
+                  />
+                  <TextField
+                    name="message"
+                    label="Meddelande"
+                    value={formData.message}
+                    onChange={handleFormChange}
+                    variant="filled"
+                    multiline
+                    rows={4}
+                    sx={{ bgcolor: "#fff", borderRadius: 0 }}
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={handleFormSubmit}
+                    sx={{
+                      bgcolor: "#e31837",
+                      color: "#fff",
+                      fontWeight: 700,
+                      py: 1.5,
+                      borderRadius: 0,
+                      fontSize: "0.95rem",
+                      letterSpacing: 1,
+                      "&:hover": { bgcolor: "#b5102a" },
+                    }}
+                  >
+                    Skicka meddelande
+                  </Button>
+                </Box>
+              )}
+            </Box>
           </Box>
         </>
       )}

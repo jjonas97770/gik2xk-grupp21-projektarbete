@@ -3,6 +3,7 @@ const Product = require("./product");
 const Rating = require("./rating");
 const Cart = require("./cart");
 const CartRow = require("./cartRow");
+const Review = require("./review");
 
 // En användare kan ha många varukorgar (en per köptillfälle)
 // Varje varukorg tillhör en användare via kolumnen user_id
@@ -19,4 +20,4 @@ Product.belongsToMany(Cart, { through: CartRow, foreignKey: "product_id" });
 Product.hasMany(Rating, { foreignKey: "product_id" });
 Rating.belongsTo(Product, { foreignKey: "product_id" });
 
-module.exports = { User, Product, Rating, Cart, CartRow };
+module.exports = { User, Product, Rating, Cart, CartRow, Review };

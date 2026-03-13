@@ -30,3 +30,9 @@ export const addToCart = (productId, userId, amount) =>
 
 // Hämta varukorg för en användare
 export const getCart = (userId) => api.get(`/users/${userId}/getCart`);
+
+// Hämtar alla recensioner från databasen
+export const getReviews = () => api.get("/reviews");
+
+// Skapar en ny recension i databasen
+export const createReview = (data) => api.post("/reviews", data);
