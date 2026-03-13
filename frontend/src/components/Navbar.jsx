@@ -85,7 +85,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ bgcolor: "#e31837" }}>
       <Toolbar>
         {/* Logotyp */}
         <BuildIcon sx={{ mr: 1 }} />

@@ -2,7 +2,8 @@ const { Product, Rating } = require("../models");
 
 // Hämtar alla produkter från databasen
 const getAll = async () => {
-  return await Product.findAll();
+  const products = await Product.findAll();
+  return products.map((p) => p.toJSON());
 };
 
 // Hämtar en specifik produkt med alla dess betyg
