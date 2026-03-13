@@ -92,7 +92,7 @@ function ProductDetailPage() {
   return (
     <Box>
       {/* Tillbaka-knapp */}
-      <Button onClick={() => navigate("/")} sx={{ mb: 2 }}>
+      <Button onClick={() => navigate(-1)} sx={{ mb: 2 }}>
         ← Tillbaka
       </Button>
 

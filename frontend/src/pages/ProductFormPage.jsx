@@ -106,6 +106,8 @@ function ProductFormPage() {
           message: "Produkt uppdaterad!",
           severity: "success",
         });
+        // Navigera tillbaka till produktens detaljsida efter sparande
+        setTimeout(() => navigate(-2), 1000);
       } else {
         await createProduct(form);
         setSnackbar({
@@ -113,9 +115,9 @@ function ProductFormPage() {
           message: "Produkt skapad!",
           severity: "success",
         });
+        // Navigera tillbaka till startsidan efter att ny produkt skapats
+        setTimeout(() => navigate("/"), 1000);
       }
-      // Navigera tillbaka till produktlistan efter 1 sekund
-      setTimeout(() => navigate("/"), 1000);
     } catch (err) {
       setSnackbar({ open: true, message: "Något gick fel", severity: "error" });
     }
@@ -126,7 +128,7 @@ function ProductFormPage() {
     if (window.confirm("Är du säker på att du vill ta bort produkten?")) {
       try {
         await deleteProduct(id);
-        navigate("/");
+        navigate(-2);
       } catch (err) {
         setSnackbar({
           open: true,
@@ -210,7 +212,8 @@ function ProductFormPage() {
         <Button variant="contained" onClick={handleSubmit}>
           {isEditMode ? "Spara ändringar" : "Skapa produkt"}
         </Button>
-        <Button variant="outlined" onClick={() => navigate("/")}>
+        {/* Avbryt går tillbaka ett steg i historiken */}
+        <Button variant="outlined" onClick={() => navigate(-1)}>
           Avbryt
         </Button>
         {/* Ta bort-knapp visas bara i redigeringsläge */}

@@ -58,8 +58,8 @@ function ProductsPage() {
 
       {/* Visa "tillbaka"-knapp om en kategori är vald */}
       {category && (
-        <Button sx={{ mb: 3 }} onClick={() => navigate("/")}>
-          ← Visa alla produkter
+        <Button sx={{ mb: 3 }} onClick={() => navigate(-1)}>
+          ← Tillbaka
         </Button>
       )}
 
