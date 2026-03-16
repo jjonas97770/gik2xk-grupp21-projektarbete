@@ -16,6 +16,7 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getProducts, getReviews, createReview } from "../api/index";
 
+// Hjälpfunktion för att hämta ordinarie pris för rea-produkter
 const getOriginalPrice = (id) => {
   const prices = { 21: 4499, 37: 1799, 63: 1999 };
   return prices[id] || null;
@@ -51,10 +52,10 @@ function ProductsPage() {
     : null;
 
   const navigate = useNavigate();
-
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
 
+  // Hämtar produkter och recensioner från backend när sidan laddas
   useEffect(() => {
     getProducts()
       .then((res) => {
@@ -65,10 +66,7 @@ function ProductsPage() {
         console.error(err);
         setLoading(false);
       });
-  }, []);
 
-  // Hämtar alla recensioner från backend när sidan laddas
-  useEffect(() => {
     getReviews()
       .then((res) => setReviews(res.data))
       .catch((err) => console.error(err));
@@ -78,14 +76,17 @@ function ProductsPage() {
     ? products.filter((p) => p.category === category)
     : products;
 
+  // Hämtar rea-produkter baserat på hårdkodade id:n
   const saleProducts = products
     .filter((p) => [21, 37, 63].includes(p.id))
     .slice(0, 3);
 
+  // Uppdaterar kontaktformulärets state när användaren skriver
   const handleFormChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Hanterar inlämning av kontaktformuläret
   const handleFormSubmit = () => {
     if (formData.name && formData.email && formData.message) {
       setFormSent(true);
@@ -106,7 +107,6 @@ function ProductsPage() {
           setReviews([res.data, ...reviews]);
           setReviewSent(true);
           setReviewForm({ name: "", rating: 5, message: "" });
-          // Dölj bekräftelsemeddelandet efter 3 sekunder
           setTimeout(() => setReviewSent(false), 3000);
         })
         .catch((err) => console.error(err));
@@ -247,12 +247,19 @@ function ProductsPage() {
                 }}
               />
             </Box>
-            <Grid container spacing={3}>
+            {/* Rea-kort i bredd – xs=12 (mobil), sm=4 (surfplatta+) */}
+            <Grid container spacing={3} sx={{ width: "100%", margin: 0 }}>
               {saleProducts.map((product) => (
-                <Grid item xs={12} sm={6} md={4} key={product.id}>
+                <Grid
+                  item
+                  xs={12}
+                  sm={4}
+                  key={product.id}
+                  sx={{ display: "flex" }}
+                >
                   <Card
                     sx={{
-                      height: "100%",
+                      width: "100%",
                       display: "flex",
                       flexDirection: "column",
                       borderRadius: 0,
@@ -268,7 +275,7 @@ function ProductsPage() {
                     <Box sx={{ position: "relative" }}>
                       <CardMedia
                         component="img"
-                        height="200"
+                        height="220"
                         image={
                           product.imageUrl ||
                           "https://placehold.co/300x200?text=Milwaukee"
@@ -305,10 +312,17 @@ function ProductsPage() {
                       >
                         {product.title}
                       </Typography>
+                      {/* Beskrivningen klipps av efter 2 rader för enhetlig höjd */}
                       <Typography
                         variant="body2"
                         color="text.secondary"
-                        sx={{ mb: 1 }}
+                        sx={{
+                          mb: 1,
+                          overflow: "hidden",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                        }}
                       >
                         {product.description}
                       </Typography>
@@ -382,15 +396,25 @@ function ProductsPage() {
             </Box>
 
             {/* Visa de tre första recensionerna, eller alla om showAllReviews är true */}
-            <Grid container spacing={3} sx={{ mb: 3 }}>
+            <Grid
+              container
+              spacing={3}
+              sx={{ mb: 3, width: "100%", margin: 0 }}
+            >
               {(showAllReviews ? reviews : reviews.slice(0, 3)).map(
                 (review) => (
-                  <Grid item xs={12} sm={6} md={4} key={review.id}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={4}
+                    key={review.id}
+                    sx={{ display: "flex" }}
+                  >
                     <Card
                       sx={{
+                        width: "100%",
                         borderRadius: 0,
                         boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
-                        height: "100%",
                       }}
                     >
                       <CardContent>
@@ -425,7 +449,7 @@ function ProductsPage() {
             {reviews.length > 3 && (
               <Button
                 onClick={() => setShowAllReviews(!showAllReviews)}
-                sx={{ color: "#e31837", fontWeight: 700, mb: 3 }}
+                sx={{ color: "#e31837", fontWeight: 700, mb: 3, mt: 2 }}
               >
                 {showAllReviews
                   ? "← Visa färre"
@@ -534,7 +558,6 @@ function ProductsPage() {
                 Har du frågor om våra produkter? Hör av dig så återkommer vi så
                 snart som möjligt.
               </Typography>
-
               {formSent ? (
                 <Alert severity="success" sx={{ borderRadius: 0 }}>
                   Tack! Vi återkommer till dig inom kort.
@@ -599,12 +622,20 @@ function ProductsPage() {
           <Button sx={{ mb: 3, color: "#e31837" }} onClick={() => navigate(-1)}>
             ← Tillbaka
           </Button>
-          <Grid container spacing={3}>
+          {/* Produktkort i bredd – xs=12 (mobil), sm=6 (surfplatta), md=4 (dator) */}
+          <Grid container spacing={3} sx={{ width: "100%", margin: 0 }}>
             {filteredProducts.map((product) => (
-              <Grid item xs={12} sm={6} md={4} key={product.id}>
+              <Grid
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                key={product.id}
+                sx={{ display: "flex" }}
+              >
                 <Card
                   sx={{
-                    height: "100%",
+                    width: "100%",
                     display: "flex",
                     flexDirection: "column",
                     borderRadius: 0,
@@ -618,7 +649,7 @@ function ProductsPage() {
                 >
                   <CardMedia
                     component="img"
-                    height="200"
+                    height="220"
                     image={
                       product.imageUrl ||
                       "https://placehold.co/300x200?text=Milwaukee"
@@ -641,10 +672,17 @@ function ProductsPage() {
                     >
                       {product.title}
                     </Typography>
+                    {/* Beskrivningen klipps av efter 2 rader för enhetlig höjd */}
                     <Typography
                       variant="body2"
                       color="text.secondary"
-                      sx={{ mb: 1 }}
+                      sx={{
+                        mb: 1,
+                        overflow: "hidden",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                      }}
                     >
                       {product.description}
                     </Typography>
