@@ -32,4 +32,28 @@ cd frontend
 npm run dev
 ```
 
-Frontend körs på `http://localhost:5173` och backend på `http://localhost:3000`.
+Frontend körs på `http://localhost:5173` och backend på `http://lington:3000`.
+
+---
+
+## Innan du committar och pushar
+
+Exportera alltid databasen från projektets rotmapp innan du committar, så att dina ändringar i databasen följer med:
+
+```bash
+mysqldump -u root -ppassword123 webbshop > webbshop.sql
+```
+
+Committa och pusha sedan som vanligt.
+
+---
+
+## Efter att du pullar
+
+Om någon har uppdaterat `webbshop.sql` behöver du importera den på nytt för att få med de senaste ändringarna:
+
+```bash
+mysql -u root -p webbshop < webbshop.sql
+```
+
+Skriv in lösenordet `password123` när det frågas.
