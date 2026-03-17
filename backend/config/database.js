@@ -1,10 +1,11 @@
 const { Sequelize } = require("sequelize");
 
-// Skapar en anslutning till MySQL-databasen "webbshop"
-const sequelize = new Sequelize("webbshop", "root", "password123", {
-  host: "localhost", // Bara localhost, ingen port här
-  port: 3306, // MySQL:s standardport
+
+const sequelize = new Sequelize("webbshop", "webbshopuser", "webbshop123", {
+  host: "localhost",
+  port: 3306,
   dialect: "mysql",
 });
+
 
 module.exports = sequelize;
