@@ -50,10 +50,4 @@ Committa och pusha sedan som vanligt.
 
 ## Efter att du pullar
 
-Om någon har uppdaterat `webbshop.sql` behöver du importera den på nytt för att få med de senaste ändringarna:
-
-```bash
-mysql -u root -p webbshop < webbshop.sql
-```
-
-Skriv in lösenordet `password123` när det frågas.
+Öppna `webbshop.sql` i VS Code, högerklicka i filen och välj **Run MySQL Query** för att importera databasen.

@@ -16,6 +16,8 @@ const Product = sequelize.define("Product", {
   onSale: { type: DataTypes.BOOLEAN, defaultValue: false },
   // Ordinarie pris före rea
   originalPrice: { type: DataTypes.DOUBLE },
+  // Om produkten ska visas i rea-sektionen på framsidan
+  featuredSale: { type: DataTypes.BOOLEAN, defaultValue: false },
 });
 
 module.exports = Product;

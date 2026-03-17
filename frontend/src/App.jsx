@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <CssBaseline />
       <Navbar />
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Container maxWidth="xl" sx={{ mt: 4 }}>
         <Routes>
           {/* Startsidan – visar alla produkter */}
           <Route path="/" element={<ProductsPage />} />

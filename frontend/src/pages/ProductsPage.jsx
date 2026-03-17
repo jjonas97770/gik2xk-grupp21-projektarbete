@@ -16,12 +16,6 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getProducts, getReviews, createReview } from "../api/index";
 
-// Hjälpfunktion för att hämta ordinarie pris för rea-produkter
-const getOriginalPrice = (id) => {
-  const prices = { 21: 4499, 37: 1799, 63: 1999 };
-  return prices[id] || null;
-};
-
 function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -76,10 +70,8 @@ function ProductsPage() {
     ? products.filter((p) => p.category === category)
     : products;
 
-  // Hämtar rea-produkter baserat på hårdkodade id:n
-  const saleProducts = products
-    .filter((p) => [21, 37, 63].includes(p.id))
-    .slice(0, 3);
+  // Visar produkter som är markerade för framsidan, max 6 stycken
+  const saleProducts = products.filter((p) => p.featuredSale).slice(0, 6);
 
   // Uppdaterar kontaktformulärets state när användaren skriver
   const handleFormChange = (e) => {
@@ -247,15 +239,15 @@ function ProductsPage() {
                 }}
               />
             </Box>
-            {/* Rea-kort i bredd – xs=12 (mobil), sm=4 (surfplatta+) */}
-            <Grid container spacing={3} sx={{ width: "100%", margin: 0 }}>
+            {/* width: 100% och margin: 0 borttaget – det orsakade att korten staplade sig vertikalt */}
+            <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
               {saleProducts.map((product) => (
                 <Grid
                   item
                   xs={12}
                   sm={4}
                   key={product.id}
-                  sx={{ display: "flex" }}
+                  sx={{ display: "flex", alignItems: "stretch" }}
                 >
                   <Card
                     sx={{
@@ -336,7 +328,7 @@ function ProductsPage() {
                             fontSize: "1.3rem",
                           }}
                         >
-                          {product.price} kr
+                          {product.originalPrice} kr
                         </Typography>
                         <Typography
                           sx={{
@@ -345,7 +337,7 @@ function ProductsPage() {
                             fontSize: "0.9rem",
                           }}
                         >
-                          {getOriginalPrice(product.id)} kr
+                          {product.price} kr
                         </Typography>
                       </Box>
                     </CardContent>
@@ -686,15 +678,31 @@ function ProductsPage() {
                     >
                       {product.description}
                     </Typography>
-                    <Typography
-                      sx={{
-                        color: "#e31837",
-                        fontWeight: 800,
-                        fontSize: "1.1rem",
-                      }}
-                    >
-                      {product.price} kr
-                    </Typography>
+                    {/* Visar rea-pris och överstruket ordinarie pris om produkten är på rea,
+    annars visas bara det vanliga priset */}
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Typography
+                        sx={{
+                          color: "#e31837",
+                          fontWeight: 800,
+                          fontSize: "1.1rem",
+                        }}
+                      >
+                        {product.onSale ? product.originalPrice : product.price}{" "}
+                        kr
+                      </Typography>
+                      {product.onSale && (
+                        <Typography
+                          sx={{
+                            color: "text.secondary",
+                            textDecoration: "line-through",
+                            fontSize: "0.9rem",
+                          }}
+                        >
+                          {product.price} kr
+                        </Typography>
+                      )}
+                    </Box>
                   </CardContent>
                   <CardActions sx={{ px: 2, pb: 2 }}>
                     <Button
