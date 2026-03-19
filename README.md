@@ -1,47 +1,74 @@
 # Design-av-webbapplikationer
 
-## Importera databasen
+## Första gången du klonar projektet
 
-Se till att MySQL är igång och kör sedan följande kommandon i terminalen:
+### 1. Installera beroenden
 
-1. Skapa databasen:
+Stå i `backend/`-mappen och kör:
 
 ```bash
-mysql -u root -p -e "CREATE DATABASE webbshop;"
+npm install
 ```
 
-2. Importera data:
+### 2. Skapa din personliga .env-fil
+
+Stå i `backend/`-mappen. Kör detta på Windows:
 
 ```bash
-mysql -u root -p webbshop < webbshop.sql
+copy .env.example .env
 ```
 
-Skriv in lösenordet `password123` när det frågas.
+Öppna sedan `.env` och ändra `DB_PASS` till ditt eget MySQL-lösenord.
+Den här filen committas aldrig – varje person har sin egen lokalt.
 
-3. Starta sedan backend:
+### 3. Skapa databasen
+
+Stå i **projektets rotmapp** och kör:
 
 ```bash
-cd backend
+mysql --default-character-set=utf8mb4 -u root -p -e "CREATE DATABASE webbshop;"
+```
+
+### 4. Importera all data
+
+Stå i **projektets rotmapp** och kör:
+
+```bash
+mysql --default-character-set=utf8mb4 -u root -p webbshop < webbshop.sql
+```
+
+Skriv in ditt MySQL-lösenord när det frågas.
+Flaggan `--default-character-set=utf8mb4` är viktig – den ser till att åäö importeras korrekt.
+
+### 5. Starta backend
+
+Stå i `backend/`-mappen och kör:
+
+```bash
 node app.js
 ```
 
-4. Starta frontend i en ny terminal:
+Om du ser `Databas synkad!` och `Server körs på port 3000` fungerar allt korrekt.
+
+### 6. Starta frontend
+
+Öppna en **ny terminal**, stå i `frontend/`-mappen och kör:
 
 ```bash
-cd frontend
 npm run dev
 ```
 
-Frontend körs på `http://localhost:5173` och backend på `http://lington:3000`.
+Frontend körs på `http://localhost:5173` och backend på `http://localhost:3000`.
 
 ---
 
 ## Innan du committar och pushar
 
-Exportera alltid databasen från projektets rotmapp innan du committar, så att dina ändringar i databasen följer med:
+Exportera alltid databasen med rätt encoding innan du committar.
+Stå i **projektets rotmapp** och kör (byt ut `password123` mot ditt eget lösenord):
 
 ```bash
-mysqldump -u root -ppassword123 webbshop > webbshop.sql
+mysqldump --default-character-set=utf8mb4 -u root -pDITT_LÖSENORD webbshop > webbshop.sql
 ```
 
 Committa och pusha sedan som vanligt.
@@ -50,4 +77,11 @@ Committa och pusha sedan som vanligt.
 
 ## Efter att du pullar
 
-Öppna `webbshop.sql` i VS Code, högerklicka i filen och välj **Run MySQL Query** för att importera databasen.
+Om `webbshop.sql` har ändrats av någon annan behöver du importera den på nytt.
+Stå i **projektets rotmapp** och kör:
+
+```bash
+mysql --default-character-set=utf8mb4 -u root -p webbshop < webbshop.sql
+```
+
+Skriv in ditt MySQL-lösenord när det frågas.
