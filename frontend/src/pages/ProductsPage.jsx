@@ -240,14 +240,12 @@ function ProductsPage() {
               />
             </Box>
             {/* width: 100% och margin: 0 borttaget – det orsakade att korten staplade sig vertikalt */}
-            <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
+            <Grid container spacing={3}>
               {saleProducts.map((product) => (
                 <Grid
-                  item
-                  xs={12}
-                  sm={4}
+                  size={{ xs: 12, sm: 4 }}
                   key={product.id}
-                  sx={{ display: "flex", alignItems: "stretch" }}
+                  sx={{ display: "flex" }}
                 >
                   <Card
                     sx={{
@@ -388,23 +386,18 @@ function ProductsPage() {
             </Box>
 
             {/* Visa de tre första recensionerna, eller alla om showAllReviews är true */}
-            <Grid
-              container
-              spacing={3}
-              sx={{ mb: 3, width: "100%", margin: 0 }}
-            >
+            <Grid container spacing={3} sx={{ mb: 3 }}>
               {(showAllReviews ? reviews : reviews.slice(0, 3)).map(
                 (review) => (
                   <Grid
-                    item
-                    xs={12}
-                    sm={4}
+                    size={{ xs: 12 }}
                     key={review.id}
                     sx={{ display: "flex" }}
                   >
                     <Card
                       sx={{
                         width: "100%",
+                        maxWidth: 600,
                         borderRadius: 0,
                         boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
                       }}
@@ -615,13 +608,10 @@ function ProductsPage() {
             ← Tillbaka
           </Button>
           {/* Produktkort i bredd – xs=12 (mobil), sm=6 (surfplatta), md=4 (dator) */}
-          <Grid container spacing={3} sx={{ width: "100%", margin: 0 }}>
+          <Grid container spacing={3}>
             {filteredProducts.map((product) => (
               <Grid
-                item
-                xs={12}
-                sm={6}
-                md={4}
+                size={{ xs: 12, sm: 6, md: 4 }}
                 key={product.id}
                 sx={{ display: "flex" }}
               >
