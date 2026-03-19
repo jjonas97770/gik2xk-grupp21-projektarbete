@@ -64,6 +64,7 @@ function ProductFormPage() {
     category: "",
     onSale: false, // false = inte på rea, true = visas i rea-sektionen
     originalPrice: "", // lämnas tomt om produkten inte är på rea
+    featuredSale: false,
   });
 
   const [loading, setLoading] = useState(isEditMode);
@@ -124,8 +125,16 @@ function ProductFormPage() {
   // form-objektet innehåller nu automatiskt onSale och originalPrice
   const handleSubmit = async () => {
     try {
+      // Omvandlar originalPrice till null om det är tomt
+      // MySQL accepterar inte tomma strängar i DOUBLE-kolumner
+      const dataToSend = {
+        ...form,
+        originalPrice:
+          form.originalPrice === "" ? null : Number(form.originalPrice),
+      };
+
       if (isEditMode) {
-        await updateProduct(id, form);
+        await updateProduct(id, dataToSend);
         setSnackbar({
           open: true,
           message: "Produkt uppdaterad!",
@@ -133,7 +142,7 @@ function ProductFormPage() {
         });
         setTimeout(() => navigate(-2), 1000);
       } else {
-        await createProduct(form);
+        await createProduct(dataToSend);
         setSnackbar({
           open: true,
           message: "Produkt skapad!",

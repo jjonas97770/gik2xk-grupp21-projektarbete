@@ -25,9 +25,11 @@ const getById = async (id) => {
   return { ...product.toJSON(), avgRating };
 };
 
-// Skapar en ny produkt med datan som skickas in
+// Skapar en ny produkt och returnerar den som ett vanligt JSON-objekt
+// .toJSON() behövs för att undvika serialiseringsproblem med Sequelize-objekt
 const create = async (data) => {
-  return await Product.create(data);
+  const product = await Product.create(data);
+  return product.toJSON();
 };
 
 // Uppdaterar en befintlig produkt med ny data
