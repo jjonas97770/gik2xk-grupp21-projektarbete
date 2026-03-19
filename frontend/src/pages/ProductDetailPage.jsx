@@ -105,7 +105,14 @@ function ProductDetailPage() {
             "https://via.placeholder.com/400x300?text=Ingen+bild"
           }
           alt={product.title}
-          sx={{ width: 400, height: 300, objectFit: "cover", borderRadius: 2 }}
+          sx={{
+            width: 400,
+            height: 400,
+            objectFit: "contain",
+            borderRadius: 2,
+            backgroundColor: "#f5f5f5",
+            p: 2,
+          }}
         />
 
         <Box sx={{ flex: 1, minWidth: 250 }}>
@@ -113,9 +120,24 @@ function ProductDetailPage() {
           <Typography variant="body1" sx={{ mt: 1, mb: 2 }}>
             {product.description}
           </Typography>
-          <Typography variant="h5" color="primary" sx={{ mb: 2 }}>
-            {product.price} kr
-          </Typography>
+          {/* Visar rea-pris och överstruket ordinarie pris om produkten är på rea,
+              annars visas bara det vanliga priset */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
+            <Typography variant="h5" sx={{ color: "#e31837", fontWeight: 800 }}>
+              {product.onSale ? product.originalPrice : product.price} kr
+            </Typography>
+            {product.onSale && (
+              <Typography
+                sx={{
+                  textDecoration: "line-through",
+                  color: "text.secondary",
+                  fontSize: "1.1rem",
+                }}
+              >
+                {product.price} kr
+              </Typography>
+            )}
+          </Box>
 
           {/* Snittbetyg */}
           <Typography variant="subtitle1">
