@@ -28,5 +28,3 @@ const sequelize = new Sequelize(
 );
 
 module.exports = sequelize;
-
-//Test åt Jonas
