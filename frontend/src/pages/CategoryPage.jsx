@@ -96,7 +96,7 @@ function CategoryPage() {
                 sx={{ objectFit: "contain", backgroundColor: "#f5f5f5", p: 2 }}
               />
               {/* Kategorinamn i blå banner längst ner */}
-              <CardContent sx={{ backgroundColor: "#1565c0", py: 1 }}>
+              <CardContent sx={{ backgroundColor: "#e31837", py: 1 }}>
                 <Typography
                   variant="subtitle1"
                   sx={{
