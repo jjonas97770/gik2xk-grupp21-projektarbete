@@ -18,17 +18,12 @@ const allCategories = [
   "Borrhammare",
   "Slagskruvdragare",
   "Cirkelsågar",
-  "Combokit",
-  "Fogpistoler & tillbehör",
-  "Fräsmaskiner",
-  "Hyvlar",
   "Kap och Gersågar",
   "Lampor",
   "Metallsågar & Metallbearbetning",
   "Mutterdragare",
   "Nibblare och Plåtsaxar",
   "Polermaskiner",
-  "Skruvautomater",
   "Slipmaskiner",
   "Dyckert & Stiftpistoler",
   "Sticksågar",
@@ -79,11 +74,15 @@ function CategoryPage() {
       <Typography variant="h4" sx={{ mb: 3 }}>
         Milwaukee M18 – Alla kategorier
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justifyContent="center">
         {allCategories.map((category) => (
           <Grid item xs={12} sm={6} md={3} key={category}>
             <Card
-              sx={{ cursor: "pointer", "&:hover": { opacity: 0.85 } }}
+              sx={{
+                cursor: "pointer",
+                "&:hover": { opacity: 0.85 },
+                width: 300,
+              }}
               onClick={() =>
                 navigate(`/?category=${encodeURIComponent(category)}`)
               }

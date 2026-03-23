@@ -24,11 +24,10 @@ const remove = async (id) => {
   return true;
 };
 
-// Hämtar den senaste varukorgen för en användare
 // Inkluderar produkterna i varukorgen via CartRow
 const getCart = async (userId) => {
   const cart = await Cart.findOne({
-    where: { user_id: userId },
+    where: { user_id: userId, payed: false },
     order: [["createdAt", "DESC"]], // Senast skapade varukorgen
     include: [
       {
