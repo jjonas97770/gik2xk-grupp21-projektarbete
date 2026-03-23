@@ -90,7 +90,7 @@ function Navbar() {
           to="/"
           sx={{ flexGrow: 1, textDecoration: "none", color: "inherit" }}
         >
-          PowerTools
+          PowerTools | Startsida
         </Typography>
 
         {/* Nivå 1 – Produkter-knapp */}
