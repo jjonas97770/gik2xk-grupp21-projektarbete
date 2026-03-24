@@ -49,7 +49,11 @@ function OrderConfirmationPage() {
         Totalt: {totalPrice.toFixed(2)} kr
       </Typography>
 
-      <Button variant="contained" onClick={() => navigate("/")}>
+      <Button
+        variant="contained"
+        onClick={() => navigate("/")}
+        sx={{ bgcolor: "#e31837", "&:hover": { bgcolor: "#b5102a" } }}
+      >
         Fortsätt handla
       </Button>
     </Box>

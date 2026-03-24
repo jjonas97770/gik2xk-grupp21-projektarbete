@@ -81,7 +81,11 @@ function CartPage() {
           <Typography>Din varukorg är tom.</Typography>
           <Button
             variant="contained"
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 2,
+              bgcolor: "#e31837",
+              "&:hover": { bgcolor: "#b5102a" },
+            }}
             onClick={() => navigate("/")}
           >
             Fortsätt handla

@@ -297,10 +297,22 @@ function ProductFormPage() {
 
       {/* Åtgärdsknappar */}
       <Box sx={{ display: "flex", gap: 2 }}>
-        <Button variant="contained" onClick={handleSubmit}>
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+          sx={{ bgcolor: "#e31837", "&:hover": { bgcolor: "#b5102a" } }}
+        >
           {isEditMode ? "Spara ändringar" : "Skapa produkt"}
         </Button>
-        <Button variant="outlined" onClick={() => navigate(-1)}>
+        <Button
+          variant="outlined"
+          onClick={() => navigate(-1)}
+          sx={{
+            borderColor: "#9e9e9e",
+            color: "#9e9e9e",
+            "&:hover": { borderColor: "#757575", color: "#757575" },
+          }}
+        >
           Avbryt
         </Button>
         {isEditMode && (

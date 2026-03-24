@@ -9,7 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import BuildIcon from "@mui/icons-material/Build";
+import HandymanOutlinedIcon from "@mui/icons-material/HandymanOutlined";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -83,14 +83,14 @@ function Navbar() {
     <AppBar position="static" sx={{ bgcolor: "#e31837" }}>
       <Toolbar>
         {/* Logotyp */}
-        <BuildIcon sx={{ mr: 1 }} />
+        <HandymanOutlinedIcon sx={{ mr: 1 }} />
         <Typography
           variant="h6"
           component={Link}
           to="/"
           sx={{ flexGrow: 1, textDecoration: "none", color: "inherit" }}
         >
-          PowerTools | Startsida
+          Milwaukee | Startsida
         </Typography>
 
         {/* Nivå 1 – Produkter-knapp */}
@@ -101,6 +101,12 @@ function Navbar() {
         >
           Produkter
         </Button>
+
+        <Divider
+          orientation="vertical"
+          flexItem
+          sx={{ bgcolor: "rgba(255,255,255,0.3)", mx: 1 }}
+        />
 
         {/* Nivå 1 – Märkesmeny */}
         <Menu
@@ -189,9 +195,22 @@ function Navbar() {
           Kategorier
         </Button>
 
+        <Divider
+          orientation="vertical"
+          flexItem
+          sx={{ bgcolor: "rgba(255,255,255,0.3)", mx: 1 }}
+        />
+
         <Button color="inherit" component={Link} to="/products/new">
           Lägg till produkt
         </Button>
+
+        <Divider
+          orientation="vertical"
+          flexItem
+          sx={{ bgcolor: "rgba(255,255,255,0.3)", mx: 1 }}
+        />
+
         <Button
           color="inherit"
           component={Link}

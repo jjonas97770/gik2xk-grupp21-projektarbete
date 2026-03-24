@@ -92,7 +92,16 @@ function ProductDetailPage() {
   return (
     <Box>
       {/* Tillbaka-knapp */}
-      <Button onClick={() => navigate(-1)} sx={{ mb: 2 }}>
+      <Button
+        variant="outlined"
+        onClick={() => navigate(-1)}
+        sx={{
+          mb: 2,
+          borderColor: "#9e9e9e",
+          color: "#9e9e9e",
+          "&:hover": { borderColor: "#757575", color: "#757575" },
+        }}
+      >
         ← Tillbaka
       </Button>
 
@@ -168,7 +177,11 @@ function ProductDetailPage() {
               size="small"
               sx={{ width: 80 }}
             />
-            <Button variant="contained" onClick={handleAddToCart}>
+            <Button
+              variant="contained"
+              onClick={handleAddToCart}
+              sx={{ bgcolor: "#e31837", "&:hover": { bgcolor: "#b5102a" } }}
+            >
               Lägg i varukorg
             </Button>
           </Box>
@@ -178,6 +191,11 @@ function ProductDetailPage() {
             <Button
               variant="outlined"
               onClick={() => navigate(`/products/${id}/edit`)}
+              sx={{
+                borderColor: "#9e9e9e",
+                color: "#9e9e9e",
+                "&:hover": { borderColor: "#757575", color: "#757575" },
+              }}
             >
               Redigera produkt
             </Button>
