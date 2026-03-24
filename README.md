@@ -110,7 +110,7 @@ Frontend körs på `http://localhost:5173` och backend på `http://localhost:300
 ## Innan du committar och pushar
 
 Exportera alltid databasen med rätt encoding innan du committar.
-Stå i **projektets rotmapp** och kör i **cmd** (byt ut `DITT_LÖSENORD` mot ditt eget lösenord, **inget mellanslag** efter `-p`):
+Stå i **projektets rotmapp** och kör i **cmd** (inte PowerShell eller VS Code-terminalen – de kan krångla med å, ä, ö). Byt ut `DITT_LÖSENORD` mot ditt eget lösenord, **inget mellanslag** efter `-p`:
 
 ```bash
 mysqldump --default-character-set=utf8mb4 -u root -pDITT_LÖSENORD webbshop > webbshop.sql
