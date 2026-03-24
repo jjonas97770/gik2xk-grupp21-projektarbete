@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import {
   Box,
   Typography,
@@ -300,6 +303,7 @@ function ProductFormPage() {
         <Button
           variant="contained"
           onClick={handleSubmit}
+          startIcon={<SaveOutlinedIcon />}
           sx={{ bgcolor: "#e31837", "&:hover": { bgcolor: "#b5102a" } }}
         >
           {isEditMode ? "Spara ändringar" : "Skapa produkt"}
@@ -307,6 +311,7 @@ function ProductFormPage() {
         <Button
           variant="outlined"
           onClick={() => navigate(-1)}
+          startIcon={<CloseOutlinedIcon />}
           sx={{
             borderColor: "#9e9e9e",
             color: "#9e9e9e",
@@ -315,11 +320,15 @@ function ProductFormPage() {
         >
           Avbryt
         </Button>
-        {isEditMode && (
-          <Button variant="outlined" color="error" onClick={handleDelete}>
-            Ta bort produkt
-          </Button>
-        )}
+
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={handleDelete}
+          startIcon={<DeleteForeverOutlinedIcon />}
+        >
+          Ta bort produkt
+        </Button>
       </Box>
 
       {/* Bekräftelse- och felmeddelanden */}

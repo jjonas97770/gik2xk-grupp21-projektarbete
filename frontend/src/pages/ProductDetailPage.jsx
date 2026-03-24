@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Box,
   Typography,
@@ -180,6 +182,7 @@ function ProductDetailPage() {
             <Button
               variant="contained"
               onClick={handleAddToCart}
+              startIcon={<ShoppingCartIcon />}
               sx={{ bgcolor: "#e31837", "&:hover": { bgcolor: "#b5102a" } }}
             >
               Lägg i varukorg
@@ -191,6 +194,7 @@ function ProductDetailPage() {
             <Button
               variant="outlined"
               onClick={() => navigate(`/products/${id}/edit`)}
+              startIcon={<EditIcon />}
               sx={{
                 borderColor: "#9e9e9e",
                 color: "#9e9e9e",
